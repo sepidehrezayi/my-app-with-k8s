@@ -29,7 +29,8 @@ let mongoUrlDocker = "mongodb://admin:password@mongodb";
 const mongodbUsername = process.env.MONGODB_USERNAME;
 const mongodbPassword = process.env.MONGODB_PASSWORD;
 //const mongodbUrl = process.env.MONGODB_URL;
-let mongoUrlKubernetes = `mongodb://${mongodbUsername}:${mongodbPassword}@mongo-service`;
+//let mongoUrlKubernetes = `mongodb://${mongodbUsername}:${mongodbPassword}@mongo-service`;
+let mongoUrlKubernetes = 'mongodb://${mongodbUsername}:${mongodbPassword}@mongodb:27017'
 
 // Now you can use `mongoUrlKubernetes` in your application.
 
