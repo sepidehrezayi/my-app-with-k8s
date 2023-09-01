@@ -1,9 +1,9 @@
-let express = require('express');
-let path = require('path');
-let fs = require('fs');
-let MongoClient = require('mongodb').MongoClient;
-let bodyParser = require('body-parser');
-let app = express();
+const express = require('express');
+const path = require('path');
+const fs = require('fs');
+const MongoClient = require('mongodb').MongoClient;
+const bodyParser = require('body-parser');
+const app = express();
 
 app.use(bodyParser.urlencoded({
   extended: true
@@ -11,35 +11,19 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, "index.html"));
-  });
+  res.sendFile(path.join(__dirname, "index.html"));
+});
 
 app.get('/profile-picture', function (req, res) {
   let img = fs.readFileSync(path.join(__dirname, "images/profile-1.jpg"));
-  res.writeHead(200, {'Content-Type': 'image/jpg' });
+  res.writeHead(200, { 'Content-Type': 'image/jpg' });
   res.end(img, 'binary');
 });
 
-// use when starting application locally
-let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
-
-// use when starting application as docker container
-let mongoUrlDocker = "mongodb://admin:password@mongodb";
-// use when starting application in k8s
-const mongodbUsername = process.env.MONGODB_USERNAME;
-const mongodbPassword = process.env.MONGODB_PASSWORD;
-//const mongodbUrl = process.env.MONGODB_URL;
-//let mongoUrlKubernetes = `mongodb://${mongodbUsername}:${mongodbPassword}@mongo-service`;
-let mongoUrlKubernetes = 'mongodb://${mongodbUsername}:${mongodbPassword}@mongodb:27017'
-
-// Now you can use `mongoUrlKubernetes` in your application.
-
-
-// pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
-let mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
-
-// "user-account" in demo with docker. "my-db" in demo with docker-compose
-let databaseName = "my-db";
+// Set the environment variables for MongoDB connection
+const mongoUrlKubernetes = "mongodb://admin:password@mongo-service:27017";
+const mongoClientOptions = { useNewUrlParser: true, useUnifiedTopology: true };
+const databaseName = "my-db";
 
 app.post('/update-profile', function (req, res) {
   let userObj = req.body;
@@ -53,11 +37,10 @@ app.post('/update-profile', function (req, res) {
     let myquery = { userid: 1 };
     let newvalues = { $set: userObj };
 
-    db.collection("users").updateOne(myquery, newvalues, {upsert: true}, function(err, res) {
+    db.collection("users").updateOne(myquery, newvalues, { upsert: true }, function (err, result) {
       if (err) throw err;
       client.close();
     });
-
   });
   // Send response
   res.send(userObj);
