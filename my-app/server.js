@@ -26,7 +26,7 @@ let mongoUrlLocal = "mongodb://admin:password@localhost:27017";
 // use when starting application as docker container
 let mongoUrlDocker = "mongodb://admin:password@mongodb";
 
-// use when running the application in Kebernetes
+// use when running the application in Kubernetes
 let mongoUrlKubernetes = "mongodb://admin:password@mongo-service"
 
 // pass these options to mongo client connect request to avoid DeprecationWarning for current Server Discovery and Monitoring engine
